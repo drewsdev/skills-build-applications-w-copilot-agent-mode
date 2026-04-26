@@ -85,17 +85,24 @@ WSGI_APPLICATION = 'octofit_tracker.wsgi.application'
 
 # Database
 # Use Djongo to connect to MongoDB octofit_db
+mongo_username = os.environ.get('MONGO_USERNAME')
+mongo_password = os.environ.get('MONGO_PASSWORD')
+MONGO_CLIENT = {
+    'host': 'mongodb://localhost:27017',
+}
+if mongo_username and mongo_password:
+    MONGO_CLIENT.update({
+        'username': mongo_username,
+        'password': mongo_password,
+        'authSource': 'admin',
+    })
+
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'octofit_db',
         'ENFORCE_SCHEMA': False,
-        'CLIENT': {
-            'host': 'mongodb://localhost:27017',
-            'username': '',
-            'password': '',
-            'authSource': 'admin',
-        }
+        'CLIENT': MONGO_CLIENT,
     }
 }
 # CORS settings
