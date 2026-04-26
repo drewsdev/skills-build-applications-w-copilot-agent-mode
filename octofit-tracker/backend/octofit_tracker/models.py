@@ -21,15 +21,15 @@ class User(models.Model):
         return self.name
 
 class Activity(models.Model):
-    user = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='activities')
     activity = models.CharField(max_length=100)
     duration = models.IntegerField()
 
 class Workout(models.Model):
-    user = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='workouts')
     workout = models.CharField(max_length=100)
     reps = models.IntegerField()
 
 class Leaderboard(models.Model):
-    user = models.EmailField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='leaderboard_entries')
     points = models.IntegerField()
