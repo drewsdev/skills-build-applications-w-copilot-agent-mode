@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 const Activities = () => {
   const [activities, setActivities] = useState([]);
   const codespace = process.env.REACT_APP_CODESPACE_NAME;
-  const endpoint = codespace
-    ? `https://${codespace}-8000.app.github.dev/api/activities/`
-    : 'http://localhost:8000/api/activities/';
+  const { hostname } = window.location;
+  const derivedBaseUrl = hostname.endsWith('.app.github.dev') && hostname.includes('-3000.')
+    ? `https://${hostname.replace('-3000.app.github.dev', '-8000.app.github.dev')}`
+    : 'http://localhost:8000';
+  const baseUrl = codespace
+    ? `https://${codespace}-8000.app.github.dev`
+    : derivedBaseUrl;
+  const endpoint = `${baseUrl}/api/activities/`;
 
   useEffect(() => {
     console.log('Fetching from:', endpoint);
