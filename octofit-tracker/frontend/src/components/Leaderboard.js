@@ -2,10 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 const Leaderboard = () => {
   const [leaderboard, setLeaderboard] = useState([]);
-  const codespace = process.env.REACT_APP_CODESPACE_NAME;
-  const endpoint = codespace
-    ? `https://${codespace}-8000.app.github.dev/api/leaderboard/`
-    : 'http://localhost:8000/api/leaderboard/';
+  const { hostname, protocol } = window.location;
+  const apiBaseUrl =
+    hostname === 'localhost' || hostname === '127.0.0.1'
+      ? 'http://localhost:8000'
+      : hostname.endsWith('.app.github.dev')
+      ? `https://${hostname.replace(/-3000\.app\.github\.dev$/, '-8000.app.github.dev')}`
+      : `${protocol}//${hostname}:8000`;
+  const endpoint = `${apiBaseUrl}/api/leaderboard/`;
 
   useEffect(() => {
     console.log('Fetching from:', endpoint);
