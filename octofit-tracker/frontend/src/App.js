@@ -1,6 +1,7 @@
 
 
 
+import './App.css';
 import { NavLink, Routes, Route } from 'react-router-dom';
 import Activities from './components/Activities';
 import Leaderboard from './components/Leaderboard';
