@@ -1,11 +1,27 @@
 import React, { useEffect, useState } from 'react';
 
+const getTeamsEndpoint = () => {
+  if (typeof window === 'undefined') {
+    return 'http://localhost:8000/api/teams/';
+  }
+
+  const { hostname } = window.location;
+
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return 'http://localhost:8000/api/teams/';
+  }
+
+  const codespacesMatch = hostname.match(/^(.*)-\d+\.app\.github\.dev$/);
+  if (codespacesMatch) {
+    return `https://${codespacesMatch[1]}-8000.app.github.dev/api/teams/`;
+  }
+
+  return 'http://localhost:8000/api/teams/';
+};
+
 const Teams = () => {
   const [teams, setTeams] = useState([]);
-  const codespace = process.env.REACT_APP_CODESPACE_NAME;
-  const endpoint = codespace
-    ? `https://${codespace}-8000.app.github.dev/api/teams/`
-    : 'http://localhost:8000/api/teams/';
+  const endpoint = getTeamsEndpoint();
 
   useEffect(() => {
     console.log('Fetching from:', endpoint);
